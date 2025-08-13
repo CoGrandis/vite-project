@@ -32,28 +32,9 @@ function App() {
     return prev.filter(tarea => tarea.id !== id)
   })}
 
-  const addTask = (title:string, content:string) => {
-    setTarea( (prev,id)=>{
-      prev.reduce((lastId, task)=>(task.id>lastId ? task.id ?? 0 : lastId),0 )
-      return lastId
-    })
-    const tarea: TaskInterface = {
-      id:4,
-      title:titleField,
-      content:contentField,
-      status: "Pendiente,"
-    }
-  }
+  
   const onSubmitForm = (e: React.FormEvent<HTMLFormElement>) =>{
     e.preventDefault()
-
-    const tarea: TaskInterface = {
-      id:4,
-      title:titleField,
-      content:contentField,
-      status: "Pendiente,"
-    }
-    setTarea((prev)=>[...prev, tarea])
   }
 
   return  (
