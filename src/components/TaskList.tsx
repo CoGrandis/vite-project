@@ -21,7 +21,7 @@ export const TaskList = ({borrarFunction,tareas}:TaskListProps) =>{
     }) 
 
     return (
-        <div className="cardContainer">
+        <div>
             {cards}
         </div>
     )

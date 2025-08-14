@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 *{
     margin: 0;
     padding: 0;
@@ -21,7 +23,5 @@ form{
     height: fit-content;
     input{
         padding: 5px;
-        border-radius: 5px;
-        border: solid 1px grey;
     }
 }
