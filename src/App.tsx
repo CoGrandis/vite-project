@@ -1,40 +1,19 @@
 import { TaskList } from "./components/TaskList";
-import { type TaskInterface } from "./model/taskModel";
 import { useState } from "react"
-
-const initialTarea: TaskInterface[] = [
-  {
-    id:1,
-    title:"Tarea 1",
-    status:"Pendiente",
-    content:"Contenido tarea 1",
-  },
-  {
-    id:2,
-    title:"Tarea 2",
-    status:"Pendiente",
-    content:"Contenido tarea 2",
-  },
-  {
-    id:3,
-    title:"Tarea 3",
-    status:"Pendiente",
-    content:"Contenido tarea 3",
-  }
-]
+import { useTask } from "./hooks/useTask";
 
 function App() {
 
-  const [tareas, setTarea] = useState<TaskInterface[]>(initialTarea)
+  const { tareas, borrarTarea, addTask } = useTask();
   const [titleField, setTitle] = useState<string>("")
   const [contentField, setContent] = useState<string>("")
-  const borrarTarea = (id:number) =>{setTarea((prev) =>{
-    return prev.filter(tarea => tarea.id !== id)
-  })}
 
   
   const onSubmitForm = (e: React.FormEvent<HTMLFormElement>) =>{
     e.preventDefault()
+    addTask(titleField, contentField);
+    setTitle("");
+    setContent("");
   }
 
   return  (

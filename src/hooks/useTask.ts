@@ -30,16 +30,18 @@ export function useTask(){
     })}
     const addTask = (title:string, content:string) => {
     setTarea( (prev)=>{
-      prev.reduce((lastId, task)=>(task.id>lastId ? task.id ?? 0 : lastId),0 )
-    })
+    const lastId = prev.reduce(
+      (maxId, task) => (task.id > maxId ? task.id : maxId),
+      0
+    );
     const tarea: TaskInterface = {
-      id:4,
+      id:lastId+1,
       title:title,
       content:content,
-      status: "Pendiente,"
+      status: "Pendiente"
     }
-    setTarea((prev)=>[...prev, tarea])
-
+    return [...prev, tarea]
+    })
     }
 
     return {tareas, borrarTarea, addTask}
