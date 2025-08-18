@@ -15,7 +15,7 @@ export const BookList = ({deleteBook,books}:BookListProps) =>{
                 <h3>{book.titulo}</h3>
                 <span>Autor: {book.autor}</span>
                 <span>Categoria: {book.categoria.categoria}</span>
-                <button onClick={() => deleteBook(book.id)}>Eliminar</button>
+                <button onClick={() => deleteBook(book.id)} className="bg-cyan-800 hover:bg-cyan-500">Eliminar</button>
 
             </Card>
         )

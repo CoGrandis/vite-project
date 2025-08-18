@@ -22,12 +22,7 @@
 
 button{
     padding: 10px;
-    background-color: #4b53eedd;
     color: white;
     border: none;
     border-radius: 5px;
-}
-button:hover{
-    background-color: #898ff9dd;
-
 }
