@@ -12,6 +12,7 @@ export function useBook(){
 
     useEffect(()=>{
         fetchData()
+        // return cuando el componente se desmonta
         return () => cancelRequest();
     },[])
 

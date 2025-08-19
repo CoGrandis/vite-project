@@ -12,7 +12,7 @@ export const BookList = ({deleteBook,books}:BookListProps) =>{
     const cards = books.map((book)=>{
         return (
             <Card key={book.id}>
-                <h3>{book.titulo}</h3>
+                <h3>Titulo: {book.titulo}</h3>
                 <span>Autor: {book.autor}</span>
                 <span>Categoria: {book.categoria.categoria}</span>
                 <button onClick={() => deleteBook(book.id)} className="bg-cyan-800 hover:bg-cyan-500">Eliminar</button>
