@@ -7,7 +7,7 @@ interface BookConstextState{
     deleteBook: (id: number) => void;
     addBook: (titulo: string, categoria: number, autor: string) => void;
     loading: boolean;
-    error: null;
+    error: string|null;
     fetchData: () => void;
     cancelRequest: () => void;
 }
@@ -17,15 +17,16 @@ const BookContext = createContext<BookConstextState | undefined>(undefined);
 export const BookProvider = ({children}:{children:React.ReactNode})=>{
     const bookContext = useBook()
     return (
-        <BookContext value={bookContext}>
+        <BookContext.Provider value={bookContext}>
             {children}
-        </BookContext>
-    )
+        </BookContext.Provider>
+    );
 
 }
 
 // hook
-export const UseBookContent = () => {
+// eslint-disable-next-line react-refresh/only-export-components
+export const useBookContext = () => {
     const context = useContext(BookContext);
     if(!context) throw Error("Error Context");
     return context

@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { useBook } from "../hooks/useBook";
+import { UseBookContext } from "../context/bookContext";
 
 
 
 export const BookForm = () =>{
-    const {addBook} = useBook();
+    const {addBook} = UseBookContext();
     const [titleField, setTitle] = useState<string>("")
     const [authorField, setAuthor] = useState<string>("")
     const [categoryField, setCategory] = useState<number>(1)

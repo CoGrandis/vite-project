@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import './index.css'
 import { routeTree } from './routeTree.gen'
+import { BookProvider } from './context/bookContext'
 const router = createRouter({ routeTree })
 
 declare module '@tanstack/react-router' {
@@ -14,7 +15,9 @@ const rootElement = document.getElementById('root')!
 if (!rootElement.innerHTML) {
   createRoot(rootElement).render(
     <StrictMode>
-      <RouterProvider router={router} />
+      <BookProvider>
+        <RouterProvider router={router} />
+      </BookProvider>
     </StrictMode>,
   )
 }

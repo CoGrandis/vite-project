@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from "react";
 export function useBook(){
 
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState<string | null>(null);
     const [book, setBook] = useState<BookInterface[]>([])
 
     const controllerRef = useRef<AbortController|null>(null)
@@ -33,15 +33,22 @@ export function useBook(){
   
 
     const deleteBook = (id:number) =>{
+    try {
         fetch(`http://localhost:3000/api/libro/${id}`, {
-            method: "DELETE",
-            headers: {
-            'Content-Type': 'application/json'
-            }
-      ,})
+        method: "DELETE",
+        headers: {
+        'Content-Type': 'application/json'
+        }
+        ,})
         setBook((prev) =>{
         return prev.filter(book => book.id !== id)
         })
+    } catch (error) {
+        if(error instanceof Error){
+            setError(error.message)
+        }
+    }
+        
     }
 
     const addBook = (titulo:string, categoria:number, autor:string) => {
@@ -62,14 +69,22 @@ export function useBook(){
             "autor":autor,
             "titulo":titulo,
             "categoriaId":categoria})
-        
-        fetch("http://localhost:3000/api/libro", {
-            method: "POST",
-            body: bodyResponse, 
-            headers: {
-            'Content-Type': 'application/json'
+
+        try {
+            fetch("http://localhost:3000/api/libro", {
+                method: "POST",
+                body: bodyResponse, 
+                headers: {
+                'Content-Type': 'application/json'
+                }
+            ,})
+        } catch (error) {
+            if(error instanceof Error){
+                setError(error.message)
             }
-      ,})
+        }
+        
+
     }
 
 
