@@ -94,6 +94,7 @@ export function useBook(){
         }
         if(TimeOutRef.current !== null) clearTimeout(TimeOutRef.current);
         setLoading(false)
+        setError("Fetch Abort")
     }
     return {book, deleteBook, addBook, loading, error, fetchData, cancelRequest}
 

@@ -1,7 +1,11 @@
 import { BookList } from "./components/BookList";
 import { useBookContext } from "./context/bookContext";
 
-function App() {
+
+interface AppProps {
+    children?: React.ReactNode
+}
+function App({children}:AppProps) {
 
   const {book, deleteBook,fetchData, loading, error, cancelRequest} = useBookContext();
   if (loading) {
@@ -35,7 +39,7 @@ function App() {
   }
   return  (
   <main className="p-5 flex flex-col space-y-10  w-screen">
-
+      {children}
       <BookList books={book} deleteBook={deleteBook} />
 
   </main>);

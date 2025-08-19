@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { UseBookContext } from "../context/bookContext";
+import { useBookContext } from "../context/bookContext";
 
 
 
 export const BookForm = () =>{
-    const {addBook} = UseBookContext();
+    const {addBook} = useBookContext();
     const [titleField, setTitle] = useState<string>("")
     const [authorField, setAuthor] = useState<string>("")
     const [categoryField, setCategory] = useState<number>(1)
@@ -17,9 +17,9 @@ export const BookForm = () =>{
         setAuthor("");
     }
     return (
-    <form onSubmit={onSubmitForm} className="mx-auto flex flex-col max-w-sm items-center gap-y-2 rounded-xl bg-blue-100 p-6 shadow-lg outline outline-black/5 dark:bg-slate-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">
+    <form onSubmit={onSubmitForm} className="mx-auto flex flex-col max-w-sm items-center gap-y-2 rounded-xl bg-blue-50 p-6 shadow-lg outline outline-black/5 dark:bg-slate-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">
         <label htmlFor="title">Titulo</label>
-        <input type="text" name="title" id="title" value={titleField} onChange={e => {setTitle(e.target.value)}} className="h-12  border border-gray-300 text-gray-600 text-base rounded-lg block w-full py-2.5 px-4 focus:outline-none"/>
+        <input type="text" name="title" id="title" value={titleField} onChange={e => {setTitle(e.target.value)}} className="h-12  border border-gray-300 text-gray-600 text-base rounded-lg block w-full py-2.5 px-4 focus:outline-none "/>
         <label htmlFor="title">Autor</label>
         <input type="text" name="author" id="author" value={authorField} onChange={e => {setAuthor(e.target.value)}} className="h-12 border border-gray-300 text-gray-600 text-base rounded-lg block w-full py-2.5 px-4 focus:outline-none"/>
         <label htmlFor="title">Categoria</label>

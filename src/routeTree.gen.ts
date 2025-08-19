@@ -10,17 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as FormRouteImport } from './routes/form'
-import { Route as AppRouteImport } from './routes/app'
+import { Route as BookRouteImport } from './routes/book'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BookChar123BookIdChar125RouteImport } from './routes/book.{-$bookId}'
 
 const FormRoute = FormRouteImport.update({
   id: '/form',
   path: '/form',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AppRoute = AppRouteImport.update({
-  id: '/app',
-  path: '/app',
+const BookRoute = BookRouteImport.update({
+  id: '/book',
+  path: '/book',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -28,34 +29,43 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BookChar123BookIdChar125Route =
+  BookChar123BookIdChar125RouteImport.update({
+    id: '/{-$bookId}',
+    path: '/{-$bookId}',
+    getParentRoute: () => BookRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/app': typeof AppRoute
+  '/book': typeof BookRouteWithChildren
   '/form': typeof FormRoute
+  '/book/{-$bookId}': typeof BookChar123BookIdChar125Route
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/app': typeof AppRoute
+  '/book': typeof BookRouteWithChildren
   '/form': typeof FormRoute
+  '/book/{-$bookId}': typeof BookChar123BookIdChar125Route
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/app': typeof AppRoute
+  '/book': typeof BookRouteWithChildren
   '/form': typeof FormRoute
+  '/book/{-$bookId}': typeof BookChar123BookIdChar125Route
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/app' | '/form'
+  fullPaths: '/' | '/book' | '/form' | '/book/{-$bookId}'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/app' | '/form'
-  id: '__root__' | '/' | '/app' | '/form'
+  to: '/' | '/book' | '/form' | '/book/{-$bookId}'
+  id: '__root__' | '/' | '/book' | '/form' | '/book/{-$bookId}'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AppRoute: typeof AppRoute
+  BookRoute: typeof BookRouteWithChildren
   FormRoute: typeof FormRoute
 }
 
@@ -68,11 +78,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FormRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/app': {
-      id: '/app'
-      path: '/app'
-      fullPath: '/app'
-      preLoaderRoute: typeof AppRouteImport
+    '/book': {
+      id: '/book'
+      path: '/book'
+      fullPath: '/book'
+      preLoaderRoute: typeof BookRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -82,12 +92,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/book/{-$bookId}': {
+      id: '/book/{-$bookId}'
+      path: '/{-$bookId}'
+      fullPath: '/book/{-$bookId}'
+      preLoaderRoute: typeof BookChar123BookIdChar125RouteImport
+      parentRoute: typeof BookRoute
+    }
   }
 }
 
+interface BookRouteChildren {
+  BookChar123BookIdChar125Route: typeof BookChar123BookIdChar125Route
+}
+
+const BookRouteChildren: BookRouteChildren = {
+  BookChar123BookIdChar125Route: BookChar123BookIdChar125Route,
+}
+
+const BookRouteWithChildren = BookRoute._addFileChildren(BookRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AppRoute: AppRoute,
+  BookRoute: BookRouteWithChildren,
   FormRoute: FormRoute,
 }
 export const routeTree = rootRouteImport
