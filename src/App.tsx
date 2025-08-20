@@ -24,9 +24,6 @@ function App() {
   if(isError){
     return( 
       <main className="flex justify-center items-center  h-screen">
-        <div className="">
-            <input type="text" value={search} onChange={()=>{}} className="bg-white p-2 border border-black rounded-3xl"/>
-        </div>
         <div className="flex flex-col justify-center space-y-2" >
           <div className="flex space-x-2">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
@@ -41,7 +38,9 @@ function App() {
   }
   return  (
   <main className="p-5 flex flex-col space-y-10  w-screen">
-    <SearchBar/>
+    <div className="">
+      <input type="text" value={search} onChange={()=>{}} className="bg-white p-2 border border-black rounded-3xl"/>
+    </div>
     <BookList books={data ?? []} deleteBook={() => {}} />
 
   </main>);
