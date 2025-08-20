@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { useBookContext } from "../context/bookContext";
-
+import { useBook } from "../hooks/useBook";
 
 
 export const BookForm = () =>{
-    const {addBook} = useBookContext();
+
+    const {addBook} = useBook();
+    const {mutate } = addBook
     const [titleField, setTitle] = useState<string>("")
     const [authorField, setAuthor] = useState<string>("")
     const [categoryField, setCategory] = useState<number>(1)
@@ -12,7 +13,8 @@ export const BookForm = () =>{
 
     const onSubmitForm = (e: React.FormEvent<HTMLFormElement>) =>{
         e.preventDefault()
-        addBook(titleField, categoryField, authorField);
+        mutate({titulo:titleField, categoria:categoryField, autor:authorField});
+        // addBook(titleField, categoryField, authorField);
         setTitle("");
         setAuthor("");
     }

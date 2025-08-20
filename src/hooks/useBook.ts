@@ -1,101 +1,34 @@
-import { type BookInterface, type CategoriaInterface } from "../model/bookModel";
-import { useEffect, useState, useRef } from "react";
-
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { postBook } from "../api/bookApi";
 export function useBook(){
 
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    const [book, setBook] = useState<BookInterface[]>([])
-
-    const controllerRef = useRef<AbortController|null>(null)
-    const TimeOutRef = useRef<number|null>(null)
-
-    useEffect(()=>{
-        fetchData()
-        // return cuando el componente se desmonta
-        return () => cancelRequest();
-    },[])
-
-    const fetchData = () =>{
-        controllerRef.current = new AbortController()
-        const signal = controllerRef.current.signal;
-        setLoading(true)
-        setError(null)
-        TimeOutRef.current = setTimeout(()=>{
-            fetch("http://localhost:3000/api/libro",{signal})
-            .then(response => response.json())
-            .then(data => setBook(data))
-            .catch((error) => {setError(error.message)})
-            .finally(()=>setLoading(false))
-        }, 2000)
-
-    }
-  
-
-    const deleteBook = (id:number) =>{
-    try {
-        fetch(`http://localhost:3000/api/libro/${id}`, {
-        method: "DELETE",
-        headers: {
-        'Content-Type': 'application/json'
-        }
-        ,})
-        setBook((prev) =>{
-        return prev.filter(book => book.id !== id)
-        })
-    } catch (error) {
-        if(error instanceof Error){
-            setError(error.message)
-        }
-    }
-        
-    }
-
-    const addBook = (titulo:string, categoria:number, autor:string) => {
-        const  newCategoria:CategoriaInterface ={ id:categoria}
-        setBook( (prev)=>{
-            const contador = prev.reduce((lastId, task) => (task.id > lastId ? task.id : lastId),0);
-            const book: BookInterface = {
-                id:contador+1,
-                titulo: titulo,
-                autor:autor,
-                categoria:newCategoria,
+    const fetchData = useQuery({
+        queryKey : ["books"],
+        queryFn : async ({signal}) => {
+            const response = await fetch('http://localhost:3000/api/libro/', {signal});
+            if (!response.ok) {
+                throw new Error('Error');
             }
-            return [...prev, book]
-        })
-
-
-        const bodyResponse = JSON.stringify({
-            "autor":autor,
-            "titulo":titulo,
-            "categoriaId":categoria})
-
-        try {
-            fetch("http://localhost:3000/api/libro", {
-                method: "POST",
-                body: bodyResponse, 
-                headers: {
-                'Content-Type': 'application/json'
-                }
-            ,})
-        } catch (error) {
-            if(error instanceof Error){
-                setError(error.message)
+            const books = await response.json()
+            return books
             }
-        }
-        
+    })
 
+    const queryClient = useQueryClient()
+    
+    const cancelRequest =  () =>{
+        queryClient.cancelQueries({ queryKey: ['books'] })
     }
+ 
+    const addBook = useMutation({
+        mutationFn: postBook,
+        onSuccess: (data) => {
+            console.log('Success:', data);
+            queryClient.invalidateQueries({ queryKey: ['books'] });
+        },
+    })
 
+   
 
-    const cancelRequest = () =>{
-        if (controllerRef.current) {
-                controllerRef.current.abort();
-        }
-        if(TimeOutRef.current !== null) clearTimeout(TimeOutRef.current);
-        setLoading(false)
-        setError("Fetch Abort")
-    }
-    return {book, deleteBook, addBook, loading, error, fetchData, cancelRequest}
-
+    return {fetchData, cancelRequest, addBook}
 }
