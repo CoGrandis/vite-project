@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { postBook } from "../api/bookApi";
-export function useBook(){
-
-    const fetchData = useQuery({
+import type { BookInterface } from "../model/bookModel";
+export function useBook(search?: string){
+    const fetchData  = useQuery({
         queryKey : ["books"],
         queryFn : async ({signal}) => {
             const response = await fetch('http://localhost:3000/api/libro/', {signal});
@@ -14,6 +14,14 @@ export function useBook(){
             }
     })
 
+    const filteredBooks = fetchData.data?.filter((book:BookInterface) => {
+        if (!search) return true;
+        const lowerSearch = search.toLowerCase();
+        return (
+            book.titulo?.toLowerCase().includes(lowerSearch)
+        );
+    }) || [];
+
     const queryClient = useQueryClient()
     
     const cancelRequest =  () =>{
@@ -24,11 +32,12 @@ export function useBook(){
         mutationFn: postBook,
         onSuccess: (data) => {
             console.log('Success:', data);
-            queryClient.invalidateQueries({ queryKey: ['books'] });
+            queryClient.invalidateQueries({ queryKey: ['books', 'search'] });
         },
     })
 
+
    
 
-    return {fetchData, cancelRequest, addBook}
+    return {fetchData: { ...fetchData, data: filteredBooks }, cancelRequest, addBook }
 }

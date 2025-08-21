@@ -1,11 +1,28 @@
 import { BookList } from "./components/BookList";
 import { useBook } from "./hooks/useBook";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 function App() {
+  const [debounceSearch, setDebounceSearch] = useState<string>("");
+  const [search, setSearch] = useState<string>("");
 
-  const {fetchData, cancelRequest} = useBook();
+  const {fetchData, cancelRequest} = useBook(debounceSearch);
   const { data, isPending, isError, refetch } = fetchData;
-  const [search, setSearch] = useState<string>()
+
+  useEffect(()=>{
+    const handler = setTimeout(()=>{
+        setDebounceSearch(search)
+    }, 1000)
+    return () =>{
+      clearTimeout(handler)
+    };
+  },[search])
+
+  useEffect(()=>{
+    if(debounceSearch){
+      console.log(debounceSearch)
+    }
+  },[debounceSearch])
+
 
   if (isPending) {
     return( 
@@ -39,7 +56,7 @@ function App() {
   return  (
   <main className="p-5 flex flex-col space-y-10  w-screen">
     <div className="">
-      <input type="text" value={search} onChange={()=>{}} className="bg-white p-2 border border-black rounded-3xl"/>
+      <input type="text" value={search} onChange={(e)=>setSearch(e.target.value)} className="bg-white p-2 border border-black rounded-3xl"/>
     </div>
     <BookList books={data ?? []} deleteBook={() => {}} />
 
