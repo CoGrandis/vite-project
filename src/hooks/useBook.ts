@@ -1,11 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { postBook } from "../api/bookApi";
+
 import type { BookInterface } from "../model/bookModel";
-export function useBook(search?: string){
-    const fetchData  = useQuery({
-        queryKey : ["books"],
+export function useBook(page?:number,search?: string){
+
+    const fetchData  = useQuery<BookInterface[]>({
+        queryKey : ["books", page],
         queryFn : async ({signal}) => {
-            const response = await fetch('http://localhost:3000/api/libro/', {signal});
+            const response = await fetch('http://localhost:3000/api/libro?page=' + page, {signal});
             if (!response.ok) {
                 throw new Error('Error');
             }
@@ -25,14 +27,17 @@ export function useBook(search?: string){
     const queryClient = useQueryClient()
     
     const cancelRequest =  () =>{
-        queryClient.cancelQueries({ queryKey: ['books'] })
+        queryClient.cancelQueries({ queryKey: ['books'] })  
     }
  
     const addBook = useMutation({
         mutationFn: postBook,
         onSuccess: (data) => {
             console.log('Success:', data);
-            queryClient.invalidateQueries({ queryKey: ['books', 'search'] });
+            queryClient.invalidateQueries({ queryKey: ['books'] });
+            // queryClient.setQueryData<BookInterface[]>({ queryKey: ['books'] }, (prev)=>{     
+            //     return {...prev, data}
+            // })
         },
     })
 

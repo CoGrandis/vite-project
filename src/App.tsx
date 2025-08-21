@@ -4,8 +4,20 @@ import { useEffect, useState } from "react";
 function App() {
   const [debounceSearch, setDebounceSearch] = useState<string>("");
   const [search, setSearch] = useState<string>("");
+  const [page, setPage] = useState(1);
 
-  const {fetchData, cancelRequest} = useBook(debounceSearch);
+  const disminuir = () => setPage((prev) =>{
+        if( prev <= 1) return prev;
+        return prev - 1
+    } )
+
+    
+    const incrementar = () => setPage((prev) =>{
+        if( prev >= 2) return prev;
+        return prev + 1  
+    } )
+
+  const {fetchData, cancelRequest} = useBook(page, debounceSearch);
   const { data, isPending, isError, refetch } = fetchData;
 
   useEffect(()=>{
@@ -23,21 +35,6 @@ function App() {
     }
   },[debounceSearch])
 
-
-  if (isPending) {
-    return( 
-    <main>
-      <div className='flex flex-col space-y-10 justify-center items-center bg-white h-screen'>
-        <div className="flex space-x-2">
-          <div className='h-5 w-5 bg-black rounded-full animate-bounce [animation-delay:-0.3s]'></div>
-          <div className='h-5 w-5 bg-black rounded-full animate-bounce [animation-delay:-0.15s]'></div>
-          <div className='h-5 w-5 bg-black rounded-full animate-bounce'></div>
-        </div>
-        <button  onClick={cancelRequest} className="bg-red-500 hover:bg-red-400">Cancelar</button>
-      </div>
-    </main>
-    )
-  }
   if(isError){
     return( 
       <main className="flex justify-center items-center  h-screen">
@@ -53,13 +50,33 @@ function App() {
       </main>
     )
   }
+
+  if (isPending) {
+    return( 
+    <main>
+      <div className='flex flex-col space-y-10 justify-center items-center bg-white h-screen'>
+        <div className="flex space-x-2">
+          <div className='h-5 w-5 bg-black rounded-full animate-bounce [animation-delay:-0.3s]'></div>
+          <div className='h-5 w-5 bg-black rounded-full animate-bounce [animation-delay:-0.15s]'></div>
+          <div className='h-5 w-5 bg-black rounded-full animate-bounce'></div>
+        </div>
+        <button  onClick={cancelRequest} className="bg-red-500 hover:bg-red-400">Cancelar</button>
+      </div>
+    </main>
+    )
+  }
+  
   return  (
   <main className="p-5 flex flex-col space-y-10  w-screen">
     <div className="">
       <input type="text" value={search} onChange={(e)=>setSearch(e.target.value)} className="bg-white p-2 border border-black rounded-3xl"/>
     </div>
     <BookList books={data ?? []} deleteBook={() => {}} />
-
+    <div className="flex gap-2">
+      <button  onClick={disminuir} className="bg-cyan-800 hover:bg-cyan-500 p-2">Anterior</button>
+      <button onClick={incrementar} className="bg-cyan-800 hover:bg-cyan-500  p-2">Siguiente</button>  
+    </div>
+    
   </main>);
   
 }

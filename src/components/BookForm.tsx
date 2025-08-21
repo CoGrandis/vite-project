@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useBook } from "../hooks/useBook";
+import type { NewBookInterface } from "../model/bookModel";
 
 
 export const BookForm = () =>{
@@ -13,8 +14,12 @@ export const BookForm = () =>{
 
     const onSubmitForm = (e: React.FormEvent<HTMLFormElement>) =>{
         e.preventDefault()
-        mutate({titulo:titleField, categoria:categoryField, autor:authorField});
-        // addBook(titleField, categoryField, authorField);
+        const newBook:NewBookInterface = {
+            autor:authorField,
+            titulo:titleField,
+            categoriaId:categoryField
+        }
+        mutate(newBook);
         setTitle("");
         setAuthor("");
     }

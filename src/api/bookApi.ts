@@ -1,8 +1,4 @@
-interface NewBook {
-    titulo: string;
-    categoria: number;
-    autor: string;
-};
+import type { NewBookInterface } from "../model/bookModel";
 
 async function fetchData(){
     const response = await fetch('http://localhost:3000/api/libro/');
@@ -13,11 +9,11 @@ async function fetchData(){
     return books
 }
 
-async function postBook({ titulo, categoria, autor }: NewBook) {
+async function postBook({autor, categoriaId, titulo}:NewBookInterface) {
     const bodyResponse = JSON.stringify({
         autor,
         titulo,
-        categoriaId: categoria
+        categoriaId:categoriaId
     });
 
     const response = await fetch('http://localhost:3000/api/libro/', {
